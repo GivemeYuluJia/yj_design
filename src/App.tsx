@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from './components/Button';
 import Menu from './components/Menu';
+import Modal from './components/Modal';
 import './styles/index.scss'
 
 function App() {
+  const [ visible, setVisible ] = useState(false);
+  const [num, setNum] = useState(0)
+  const hide = () => {
+    setVisible(false);
+  }
+  // useEffect(() => {
+  //   setNum(num+1);
+  //   setTimeout(() => {
+  //     setNum(num + 2)
+  //   })
+  // }, [])
   return (
     <div className="App">
+      {num + '-' + num}
       <header className="App-header">
         <Button>default</Button>
         <Button disabled>disabled</Button>
@@ -37,7 +50,10 @@ function App() {
           </Menu.SubMenu>
         </Menu>
         <br />
-        
+        <button onClick={() => setVisible(true)}>click</button>
+        <Modal visible={visible} closeModal={hide}>
+          <div>it is my context</div>
+        </Modal>
       </header>
     </div>
   );
