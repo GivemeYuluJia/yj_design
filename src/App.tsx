@@ -51,9 +51,9 @@ function App() {
         </Menu>
         <br />
         <button onClick={() => setVisible(true)}>click</button>
-        <Modal visible={visible} closeModal={hide}>
+        {/* <Modal visible={visible} closeModal={hide}>
           <div>it is my context</div>
-        </Modal>
+        </Modal> */}
       </header>
     </div>
   );
