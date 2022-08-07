@@ -5,7 +5,7 @@ export type ButtonSize = 'lg' | 'sm';
 export type ButtonType = 'primary' | 'default' | 'danger' | 'link';
 
 interface BaseButtonProps {
-  classname?: string,
+  className?: string,
   /**设置 Button 的禁用 */
   disabled?: boolean,
   /**设置 Button 的尺寸 */
@@ -23,7 +23,7 @@ export type ButtonProps = Partial<NativeButtonProps & AnchorButtonProps>
 
 const Button: React.FC<ButtonProps> = (props) => {
   const {
-    classname,
+    className,
     disabled,
     size,
     btnType,
@@ -32,7 +32,7 @@ const Button: React.FC<ButtonProps> = (props) => {
     ...restProps
   } = props;
 
-  const classes = classNames('btn', classname, {
+  const classes = classNames('btn', className, {
     [`btn-${btnType}`]: btnType,
     [`btn-${size}`]: size,
     'disabled': (btnType === 'link') && disabled

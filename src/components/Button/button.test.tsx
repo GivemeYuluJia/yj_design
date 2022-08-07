@@ -9,7 +9,7 @@ const defaultProps = {
 const testProps: ButtonProps = {
   btnType: 'primary',
   size: 'lg',
-  classname: 'klass'
+  className: 'klass'
 }
 const disabledProps: ButtonProps = {
   disabled: true,
