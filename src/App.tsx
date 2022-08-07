@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Button from './components/Button';
 import Menu from './components/Menu';
 import Modal from './components/Modal';
+import Input from './components/Input';
+import { CloseBtnIcon } from './icons';
 import './styles/index.scss'
 
 function App() {
@@ -51,9 +53,13 @@ function App() {
         </Menu>
         <br />
         <button onClick={() => setVisible(true)}>click</button>
-        {/* <Modal visible={visible} closeModal={hide}>
+        <Modal visible={visible} closeModal={hide}>
           <div>it is my context</div>
-        </Modal> */}
+        </Modal>
+        <br />
+        <Input type='text' prepend="https://" append=".com"/>
+        <Input type='text' size='lg' placeholder="sizes" icon={<CloseBtnIcon />}/>
+        <Input type='text' size='sm' placeholder="sizes" />
       </header>
     </div>
   );
