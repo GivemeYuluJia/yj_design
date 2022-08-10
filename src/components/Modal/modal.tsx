@@ -74,7 +74,7 @@ const Modal: React.FC<PropsWithChildren<ModalProps>> = React.memo((props) => {
       closeModal();
     }
   };
-  console.log(aniClassName,'aniClassName',contentClassName, 'contentClassName')
+  // console.log(aniClassName,'aniClassName',contentClassName, 'contentClassName')
   if(!visible && !active) {
     return null;
   }

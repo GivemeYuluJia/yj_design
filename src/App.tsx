@@ -5,19 +5,65 @@ import Modal from './components/Modal';
 import Input from './components/Input';
 import { CloseBtnIcon } from './icons';
 import './styles/index.scss'
-
+import AutoComplete from './components/AutoComplete';
+import Loading from './components/Loading/loading';
+import { DataSourceType } from './components/AutoComplete/autoComplete';
+interface GithubUserProps {
+  login: string;
+  url: string;
+  avatar_url: string;
+}
+let timer: any;
 function App() {
   const [ visible, setVisible ] = useState(false);
-  const [num, setNum] = useState(0)
+  const [num, setNum] = useState(0);
+
+  const [value, setValue] = useState('');
+  const [options, setOptions] = useState<{ value: string }[]>([]);
+  const [ loading, setLoading ] = useState<boolean>(false);
+
   const hide = () => {
     setVisible(false);
   }
-  // useEffect(() => {
-  //   setNum(num+1);
-  //   setTimeout(() => {
-  //     setNum(num + 2)
-  //   })
-  // }, [])
+  const handleFetch = (query: string) => {
+    return fetch(`https://api.github.com/search/users?q=${query}`)
+      .then(res => res.json())
+      .then(({ items }) => {
+        console.log(items)
+        return items.slice(0, 10).map((item: any) => ({ value: item.login, ...item}))
+      })
+  }
+  const handleChange = (e: any) => {
+    console.log(e, 'e')
+  }
+  const onSearch = (searchText: string) => {
+    clearTimeout(timer);
+    // setLoading(true);
+    timer = setTimeout(() => {
+      if(searchText) {
+        handleFetch(searchText).then(res => {
+          setOptions(res);
+          // setLoading(false);
+        })
+      }
+    }, 300)
+  };
+
+  const onSelect = (data: string) => {
+    console.log('onSelect', data);
+  };
+
+  const onChange = (data: string) => {
+    setValue(data);
+  };
+  const renderOption = (item: DataSourceType) => {
+    const itemWithGithub = item as DataSourceType<GithubUserProps>
+    return (
+      <>
+        <div>Name: {itemWithGithub.value}</div>
+      </>
+    )
+  }
   return (
     <div className="App">
       {num + '-' + num}
@@ -57,9 +103,24 @@ function App() {
           <div>it is my context</div>
         </Modal>
         <br />
-        <Input type='text' prepend="https://" append=".com"/>
+        <Input type='text' prepend="https://" append=".com" />
         <Input type='text' size='lg' placeholder="sizes" icon={<CloseBtnIcon />}/>
         <Input type='text' size='sm' placeholder="sizes" />
+        <br />
+        <AutoComplete 
+          value={value}
+          options={options}
+          style={{ width: 200 }}
+          onSelect={onSelect}
+          onSearch={onSearch}
+          onChange={onChange}
+          // loading={loading}
+          renderOptions={renderOption}
+        />
+        <br />
+        <div style={{"height": '300px', "width": '200px'}}>
+123
+        </div>
       </header>
     </div>
   );

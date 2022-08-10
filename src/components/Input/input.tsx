@@ -16,6 +16,7 @@ const Input: React.FC<InputProps> = (props) => {
   // 取出各种属性
   const {
     className,
+    style,
     disabled,
     size,
     icon,
@@ -42,7 +43,7 @@ const Input: React.FC<InputProps> = (props) => {
   }
   
   return (
-    <div className={classes}>
+    <div className={classes} style={style}>
       { prepend && <div className="yj-input-group-prepend">{prepend}</div> }
       { icon && <div className="icon-wrapper">{icon}</div>}
       <input  
