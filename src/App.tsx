@@ -6,8 +6,12 @@ import Input from './components/Input';
 import { CloseBtnIcon } from './icons';
 import './styles/index.scss'
 import AutoComplete from './components/AutoComplete';
-import Loading from './components/Loading/loading';
 import { DataSourceType } from './components/AutoComplete/autoComplete';
+
+import request from './utils/request';
+import Progress from './components/Progress';
+import Upload from './components/Upload/upload';
+
 interface GithubUserProps {
   login: string;
   url: string;
@@ -21,7 +25,11 @@ function App() {
   const [value, setValue] = useState('');
   const [options, setOptions] = useState<{ value: string }[]>([]);
   const [ loading, setLoading ] = useState<boolean>(false);
-
+  const defaultFileList: any[] = [
+    { uid: '123', size: 1234, name: 'hello.md', status: 'uploading', percent: 30 },
+    { uid: '122', size: 1234, name: 'xyz.md', status: 'success', percent: 30 },
+    { uid: '121', size: 1234, name: 'eyiha.md', status: 'error', percent: 30 }
+  ]
   const hide = () => {
     setVisible(false);
   }
@@ -32,9 +40,6 @@ function App() {
         console.log(items)
         return items.slice(0, 10).map((item: any) => ({ value: item.login, ...item}))
       })
-  }
-  const handleChange = (e: any) => {
-    console.log(e, 'e')
   }
   const onSearch = (searchText: string) => {
     clearTimeout(timer);
@@ -64,6 +69,30 @@ function App() {
       </>
     )
   }
+  const url = "https://jsonplaceholder.typicode.com/posts";
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    const newFile = files && new File([files[0]], 'new_name.docx', {type: files[0].type})
+    console.log(newFile, '1');
+    if(files) {
+      const uploadFile = files[0];
+      const formData = new FormData();
+      formData.append(uploadFile.name, uploadFile);
+      console.log(formData.get(uploadFile.name))
+      request.post(url, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+        onUploadProgress: (e) => {
+          console.log(e, 'e')
+        }
+      }).then(resp => {
+        console.log(resp, formData);
+      }, res => console.log(res, formData))
+    }
+    
+  }
+
   return (
     <div className="App">
       {num + '-' + num}
@@ -118,9 +147,20 @@ function App() {
           renderOptions={renderOption}
         />
         <br />
-        <div style={{"height": '300px', "width": '200px'}}>
-123
-        </div>
+        <Upload 
+          action="https://jsonplaceholder.typicode.com/posts"
+          defaultFileList={defaultFileList}
+          onChange={(file) => console.log(file, 'change')}
+          // beforeUpload={(file) => {console.log(file, 'before'); return true}}
+          onProgress={(percentage, file) => console.log(percentage, file, 'progress')} 
+          onSuccess={(data, file) => console.log(data, file, 'success')}
+          onError={(err, file) => console.log(err, file, 'error')}
+          multiple={true}
+          drag
+        >
+          <br/>
+          <p>Drag file over to upload</p>
+        </Upload>
       </header>
     </div>
   );
