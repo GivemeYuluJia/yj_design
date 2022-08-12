@@ -49,7 +49,7 @@ const SubMenu: React.FC<SubMenuProps> = ({ index, title, className, children, su
     clearTimeout(classTime);
     e.preventDefault();
     if(!toggle) {
-      console.log(toggle, 'toggle')
+      // console.log(toggle, 'toggle')
       classTime = setTimeout(() => {
         setContentClassName('menuContentExit')
         flushSync(() => {

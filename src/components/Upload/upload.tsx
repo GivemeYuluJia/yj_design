@@ -27,13 +27,13 @@ export interface UploadProps {
   data?: { [key: string]: any};
   // 上传请求时是否携带 cookie
   withCredentials?: boolean; 
-  // 拖拽
-  drag?: boolean;
   defaultFileList?: UploadFile[];
   // 接受上传的文件类型
   accept?: string;
   // 是否支持多选文件 
-  multiple?: boolean;	
+  multiple?: boolean;
+  // 拖拽
+  drag?: boolean;	
   // 上传之前
   beforeUpload?: (file: File) => boolean | Promise<File>;
   // 上传文件改变时的状态 上传中
@@ -141,14 +141,14 @@ const Upload: React.FC<PropsWithChildren<UploadProps>> = (props) => {
       withCredentials,
       onUploadProgress: (e) => {
         let percentage = Math.round(e.loaded * 100 / e.total) || 0;
-        console.log(percentage, 'pg', e)
+        // console.log(percentage, 'pg', e)
         if(percentage <= 100) {
           updateFileList(_file, { percent: percentage, status: 'uploading'} )
           onProgress && onProgress(percentage, { ..._file, percent: percentage, status: 'uploading'})
         }
       }
     }).then(resp => {
-      console.log(resp);
+      // console.log(resp);
       updateFileList(_file, { response: resp, status: 'success'} )
       onSuccess && onSuccess(resp, { ..._file, response: resp, status: 'success' });
       onChange && onChange({ ..._file, response: resp, status: 'success' });
@@ -165,7 +165,7 @@ const Upload: React.FC<PropsWithChildren<UploadProps>> = (props) => {
     });
     onRemove && onRemove(file);
   }
-  console.log('up', fileList)
+  // console.log('up', fileList)
   return (
     <div
       className="yj-upload-component"

@@ -1,26 +1,32 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es5", // 编译目标
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
+    ], // 导入库类型定义
+    "allowJs": true, // 是否编辑JS
+    "skipLibCheck": true, // 对 .d.ts 类型的文件不去进行类型检查，严格性下降但速度提升
+    "esModuleInterop": true, // 和allowSyntheticDefaultImports搭配使用
+    "allowSyntheticDefaultImports": true, //允许从没有设置默认导出的模块中默认导入。这并不影响代码的输出，仅为了类型检查。
+    "strict": true, // 严格模式
+    "forceConsistentCasingInFileNames": true, // 强制区分大小写
     "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
+    "module": "esnext", // 模块类型
+    "moduleResolution": "node", // 指的是模块的解析策略，有 node 和 classic，通常写 node。
+    "resolveJsonModule": true, // 加载JSON
     "isolatedModules": true,
-    "noEmit": true,
+    "noEmit": true, // build 生成的 js 文件不输出。
     "jsx": "react-jsx"
   },
   "include": [
     "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "src/**/*.test.tsx",
+    "src/**/*.stories.tsx",
+    "src/setupTests.ts",
   ]
 }
