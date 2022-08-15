@@ -11,16 +11,28 @@
 @import "../components/Button/index";
 
 // menu
-@import "../components//Menu/index";
+@import "../components/Menu/index";
 
 // modal
 @import "../components/Modal/index";
 
 // input
-@import "../components//Input/index";
+@import "../components/Input/index";
 
 // autoComplaet
-@import "../components//AutoComplete/index";
+@import "../components/AutoComplete/index";
 
 // Loading
-@import "../components//Loading/index.scss";
+@import "../components/Loading/index";
+
+// upload
+@import "../components/Upload/index";
+
+// progress
+@import "../components/Progress/index";
+
+// icon
+@import "../icons/index";
+
+// Paginator
+@import "../components//Paginator/index";

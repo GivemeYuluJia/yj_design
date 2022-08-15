@@ -1,0 +1,86 @@
+.yj-upload-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+.yj-upload-list-item {
+  font-size: 14px;
+  line-height: 1.8;
+  margin-top: 5px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  min-width: 200px;
+  position: relative;
+  &:first-child {
+    margin-top: 10px;
+  }
+  .file-name {
+    display: inline-flex;
+    margin-left: 5px;
+    margin-right: 40px;
+    > div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 5px;
+      svg {
+        color: $gray-500;
+      }
+    }
+  }
+  .file-name-error {
+    color: $danger;
+    svg {
+      color: $danger;
+    }
+  }
+  .file-action {
+    display: none;
+    position: absolute;
+    right: 5px;
+    top: 0px;
+    line-height: inherit;
+    cursor: pointer;
+  }
+  &:hover {
+    background-color: $gray-200;
+    .file-action {
+      display: block;
+      color: $blue;
+    }
+    .file-action-error {
+      color: $danger;
+    }
+    .file-status {
+      display: none;
+    }
+  }
+  .file-status {
+    display: block;
+    position: absolute;
+    right: 5px;
+    top: 0;
+    line-height: inherit;
+    > .file-loading {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+.yj-upload-dragger {
+  background: $gray-100;
+  border: 1px dashed $gray-300;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 20px;
+  width: 360px;
+  height: 180px;
+  text-align: center;
+  &:hover {
+    border: 1px dashed $primary;
+  }
+  &.is-dragover {
+    border: 2px dashed $primary;
+    background: rgba($primary, 0.2);
+  }
+}

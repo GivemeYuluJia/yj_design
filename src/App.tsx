@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Button from './components/Button';
 import Menu from './components/Menu';
 import Modal from './components/Modal';
@@ -6,8 +6,13 @@ import Input from './components/Input';
 import { CloseBtnIcon } from './icons';
 import './styles/index.scss'
 import AutoComplete from './components/AutoComplete';
-import Loading from './components/Loading/loading';
 import { DataSourceType } from './components/AutoComplete/autoComplete';
+
+import request from './utils/request';
+import Upload from './components/Upload/upload';
+import Paginator from './components/Paginator/paginator';
+import { flushSync } from 'react-dom';
+
 interface GithubUserProps {
   login: string;
   url: string;
@@ -20,7 +25,55 @@ function App() {
 
   const [value, setValue] = useState('');
   const [options, setOptions] = useState<{ value: string }[]>([]);
-  const [ loading, setLoading ] = useState<boolean>(false);
+  const [ refreshing, setRefreshing ] = useState<boolean>(false);
+  const [ list, setList ] = useState<any[]>([
+    { key: 1, value: 1 },
+    { key: 2, value: 2 },
+    { key: 3, value: 3 },
+    { key: 4, value: 4 },
+    { key: 5, value: 5 },
+    { key: 6, value: 6 },
+    { key: 7, value: 7 },
+    { key: 8, value: 8 },
+    { key: 9, value: 9 },
+    { key: 10, value: 10 },
+    { key: 11, value: 11 },
+    { key: 12, value: 12 },
+    { key: 13, value: 13 },
+    { key: 14, value: 14 },
+    { key: 15, value: 15 },
+  ]);
+  // const [ loading, setLoading ] = useState<boolean>(false);
+
+  const listRef = useRef<HTMLDivElement | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  const defaultFileList: any[] = [
+    { uid: '123', size: 1234, name: 'hello.md', status: 'uploading', percent: 30 },
+    { uid: '122', size: 1234, name: 'xyz.md', status: 'success', percent: 30 },
+    { uid: '121', size: 1234, name: 'eyiha.md', status: 'error', percent: 30 }
+  ];
+  const scrollBottom = useCallback((behavior: 'auto' | 'smooth' = 'auto') => {
+    messagesEndRef.current?.scrollIntoView({ behavior });
+  }, []);
+  // 高度不够时自动拉取下一页，解决thread数据多不能加载的问题
+  const autoLoadMoreFromScrollHeight = useCallback(async () => {
+    if (listRef.current && list !== null) {
+      const { scrollHeight, clientHeight } = listRef.current;
+      if (scrollHeight === clientHeight) {
+        await loadNextPage();
+        scrollBottom();
+      }
+    }
+  }, [list]);
+  useEffect(() => {
+    autoLoadMoreFromScrollHeight();
+  }, [autoLoadMoreFromScrollHeight]);
+  useEffect(() => {
+    // if (!loading) {
+      scrollBottom();
+    // }
+  }, []);
 
   const hide = () => {
     setVisible(false);
@@ -32,9 +85,6 @@ function App() {
         console.log(items)
         return items.slice(0, 10).map((item: any) => ({ value: item.login, ...item}))
       })
-  }
-  const handleChange = (e: any) => {
-    console.log(e, 'e')
   }
   const onSearch = (searchText: string) => {
     clearTimeout(timer);
@@ -64,11 +114,62 @@ function App() {
       </>
     )
   }
+  const url = "https://jsonplaceholder.typicode.com/posts";
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    const newFile = files && new File([files[0]], 'new_name.docx', {type: files[0].type})
+    console.log(newFile, '1');
+    if(files) {
+      const uploadFile = files[0];
+      const formData = new FormData();
+      formData.append(uploadFile.name, uploadFile);
+      console.log(formData.get(uploadFile.name))
+      request.post(url, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+        onUploadProgress: (e) => {
+          console.log(e, 'e')
+        }
+      }).then(resp => {
+        console.log(resp, formData);
+      }, res => console.log(res, formData))
+    }
+    
+  }
+  const post = async () => {
+    // flushSync(async() => {
+      setRefreshing(true);
+      await new Promise((resolve) => {
+        // setTimeout(() => {
+          setList(pre => {
+            return [
+              { key: pre.length + 1, value: pre.length + 1},
+              { key: pre.length + 2, value: pre.length + 2 },
+              { key: pre.length + 3, value: pre.length + 3},
+              { key: pre.length + 4, value: pre.length + 4 },
+              { key: pre.length + 5, value: pre.length + 5},
+              { key: pre.length + 6, value: pre.length + 6 },
+              ...pre
+            ]
+          });
+          resolve('a');
+        // },300)
+      })
+    // })
+    
+    setRefreshing(false);
+  }
+  const loadNextPage = async() => {
+    await post();
+    return false;
+  }
+  console.log(list,'list', refreshing);
   return (
     <div className="App">
       {num + '-' + num}
       <header className="App-header">
-        <Button>default</Button>
+        {/* <Button>default</Button>
         <Button disabled>disabled</Button>
         <Button btnType='primary' size='lg'>primary lg</Button>
         <Button btnType='danger' size='sm'>danger sm</Button>
@@ -118,8 +219,39 @@ function App() {
           renderOptions={renderOption}
         />
         <br />
-        <div style={{"height": '300px', "width": '200px'}}>
-123
+        <Upload 
+          action="https://jsonplaceholder.typicode.com/posts"
+          defaultFileList={defaultFileList}
+          onChange={(file) => console.log(file, 'change')}
+          // beforeUpload={(file) => {console.log(file, 'before'); return true}}
+          onProgress={(percentage, file) => console.log(percentage, file, 'progress')} 
+          onSuccess={(data, file) => console.log(data, file, 'success')}
+          onError={(err, file) => console.log(err, file, 'error')}
+          multiple={true}
+          drag
+        >
+          <br/>
+          <p>Drag file over to upload</p>
+        </Upload>
+        <br /> */}
+        <div 
+          ref={listRef} 
+          style={{
+            height: '500px', 
+            overflowY: 'auto',
+            border: '1px solid red'
+          }}
+        >
+          <Paginator element={listRef} showLoading={refreshing} loadNextPage={loadNextPage} reverse={true}>
+            {list.map(item => {
+              return (
+                <div key={item.key} style={{ padding: '16px 8px', borderBottom: '1px solid black'}}>
+                  {item.key} - {item.value}
+                </div>
+              )
+            })}
+          </Paginator>
+          <div ref={messagesEndRef} />
         </div>
       </header>
     </div>

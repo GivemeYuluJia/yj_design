@@ -3,7 +3,6 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import Button from './button';
 import '../../styles/index.scss'
-import PropTypes from 'prop-types';
 
 export default {
   title: 'Example/Button Component',

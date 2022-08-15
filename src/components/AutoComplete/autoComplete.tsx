@@ -39,7 +39,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = (props) => {
   const autoComplateRef = useRef<HTMLDivElement>(null);
 
   const onTransitionEnd = () => {
-    console.log('complete');
+    console.log('complete autocomponent');
     if(contentClassName !== 'optioncontentEnterDone' && contentClassName !== 'optionContentExitDone') {
       setContentClassName(showDropdown ? 'optioncontentEnterDone' : 'optionContentExitDone')
     }

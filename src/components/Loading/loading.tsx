@@ -21,12 +21,12 @@ const Loading: React.FC<LoadingProps> = (props) => {
       );
     }
     return (
-      <div className='defaultLoading' />
+      <div className='defaultLoading' style={style} />
     )
-  }, [type]);
+  }, [type, style]);
 
   return (
-    <div style={style} className={classNames(className, 'loadingContainer')}>
+    <div className={classNames(className, 'loadingContainer')}>
       <LoadingComponents />
     </div>
   )
