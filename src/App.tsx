@@ -11,6 +11,7 @@ import { DataSourceType } from './components/AutoComplete/autoComplete';
 import request from './utils/request';
 import Upload from './components/Upload/upload';
 import Paginator from './components/Paginator/paginator';
+import { toast } from './components';
 import { flushSync } from 'react-dom';
 
 interface GithubUserProps {
@@ -53,25 +54,25 @@ function App() {
     { uid: '122', size: 1234, name: 'xyz.md', status: 'success', percent: 30 },
     { uid: '121', size: 1234, name: 'eyiha.md', status: 'error', percent: 30 }
   ];
-  const scrollBottom = useCallback((behavior: 'auto' | 'smooth' = 'auto') => {
-    messagesEndRef.current?.scrollIntoView({ behavior });
-  }, []);
+  // const scrollBottom = useCallback((behavior: 'auto' | 'smooth' = 'auto') => {
+  //   messagesEndRef.current?.scrollIntoView({ behavior });
+  // }, []);
   // 高度不够时自动拉取下一页，解决thread数据多不能加载的问题
-  const autoLoadMoreFromScrollHeight = useCallback(async () => {
-    if (listRef.current && list !== null) {
-      const { scrollHeight, clientHeight } = listRef.current;
-      if (scrollHeight === clientHeight) {
-        await loadNextPage();
-        scrollBottom();
-      }
-    }
-  }, [list]);
-  useEffect(() => {
-    autoLoadMoreFromScrollHeight();
-  }, [autoLoadMoreFromScrollHeight]);
+  // const autoLoadMoreFromScrollHeight = useCallback(async () => {
+  //   if (listRef.current && list !== null) {
+  //     const { scrollHeight, clientHeight } = listRef.current;
+  //     if (scrollHeight === clientHeight) {
+  //       await loadNextPage();
+  //       scrollBottom();
+  //     }
+  //   }
+  // }, [list]);
+  // useEffect(() => {
+  //   // autoLoadMoreFromScrollHeight();
+  // }, [autoLoadMoreFromScrollHeight]);
   useEffect(() => {
     // if (!loading) {
-      scrollBottom();
+      // scrollBottom();
     // }
   }, []);
 
@@ -144,13 +145,13 @@ function App() {
         // setTimeout(() => {
           setList(pre => {
             return [
+              ...pre,
               { key: pre.length + 1, value: pre.length + 1},
               { key: pre.length + 2, value: pre.length + 2 },
               { key: pre.length + 3, value: pre.length + 3},
               { key: pre.length + 4, value: pre.length + 4 },
               { key: pre.length + 5, value: pre.length + 5},
               { key: pre.length + 6, value: pre.length + 6 },
-              ...pre
             ]
           });
           resolve('a');
@@ -164,9 +165,14 @@ function App() {
     await post();
     return false;
   }
+  let num1 = 1;
+  const handleToast = () => {
+    toast.success('hahh' + (num1++),)
+  }
   console.log(list,'list', refreshing);
   return (
     <div className="App">
+      <button onClick={() => handleToast()}>click</button>
       {num + '-' + num}
       <header className="App-header">
         {/* <Button>default</Button>
@@ -218,8 +224,8 @@ function App() {
           // loading={loading}
           renderOptions={renderOption}
         />
-        <br />
-        <Upload 
+        <br /> */}
+        {/* <Upload 
           action="https://jsonplaceholder.typicode.com/posts"
           defaultFileList={defaultFileList}
           onChange={(file) => console.log(file, 'change')}
@@ -232,8 +238,8 @@ function App() {
         >
           <br/>
           <p>Drag file over to upload</p>
-        </Upload>
-        <br /> */}
+        </Upload> */}
+        <br />
         <div 
           ref={listRef} 
           style={{
@@ -242,14 +248,16 @@ function App() {
             border: '1px solid red'
           }}
         >
-          <Paginator element={listRef} showLoading={refreshing} loadNextPage={loadNextPage} reverse={true}>
-            {list.map(item => {
-              return (
-                <div key={item.key} style={{ padding: '16px 8px', borderBottom: '1px solid black'}}>
-                  {item.key} - {item.value}
-                </div>
-              )
-            })}
+          <Paginator element={listRef} showLoading={refreshing} loadNextPage={loadNextPage}>
+            <div>
+              {list.map(item => {
+                return (
+                  <div key={item.key} style={{ padding: '16px 8px', borderBottom: '1px solid black'}}>
+                    {item.key} - {item.value}
+                  </div>
+                )
+              })}
+            </div>
           </Paginator>
           <div ref={messagesEndRef} />
         </div>

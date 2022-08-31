@@ -59,6 +59,7 @@ const UnMemoizedPaginator: React.FC<React.PropsWithChildren<paginatorProps>> = (
   
   const Tip = useCallback(() => {
     if(showLoading) {
+      console.log('tip')
       return (
         <Loading
           className={classNames('loadBtn', {
@@ -68,6 +69,7 @@ const UnMemoizedPaginator: React.FC<React.PropsWithChildren<paginatorProps>> = (
         />
       );
     };
+    console.log(null);
     return null;
   }, [showLoading])
 
