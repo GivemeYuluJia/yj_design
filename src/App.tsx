@@ -7,7 +7,7 @@ import { CloseBtnIcon } from './icons';
 import './styles/index.scss'
 import AutoComplete from './components/AutoComplete';
 import { DataSourceType } from './components/AutoComplete/autoComplete';
-
+import { Popover } from './components/Popover/Popover';
 import request from './utils/request';
 import Upload from './components/Upload/upload';
 import Paginator from './components/Paginator/paginator';
@@ -174,6 +174,12 @@ function App() {
     <div className="App">
       <button onClick={() => handleToast()}>click</button>
       {num + '-' + num}
+      <div style={{ height: '10px' }}>123</div>
+      <div style={{ marginLeft: '50px'}}>
+        <Popover content='hello'>
+          hello
+        </Popover>
+      </div>
       <header className="App-header">
         {/* <Button>default</Button>
         <Button disabled>disabled</Button>
