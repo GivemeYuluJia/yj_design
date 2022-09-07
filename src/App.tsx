@@ -12,6 +12,7 @@ import request from './utils/request';
 import Upload from './components/Upload/upload';
 import Paginator from './components/Paginator/paginator';
 import { toast } from './components';
+import { VertifyImg } from './components';
 import { flushSync } from 'react-dom';
 
 interface GithubUserProps {
@@ -180,6 +181,7 @@ function App() {
           hello
         </Popover>
       </div>
+      <VertifyImg imgUrl="./vertify.png" />
       <header className="App-header">
         {/* <Button>default</Button>
         <Button disabled>disabled</Button>

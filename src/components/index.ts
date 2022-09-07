@@ -9,3 +9,4 @@ export { default as Upload } from "./Upload";
 export { default as Modal } from "./Modal";
 export { default as paginator } from "./Paginator";
 export * from "./Toast";
+export * from "./VertifyImg";
