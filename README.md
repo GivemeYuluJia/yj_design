@@ -1,46 +1,163 @@
-# Getting Started with Create React App
+# YJ-Design
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Components
+  - AutoComplete
+  ```tsx
+    interface DataSourceObject {
+      value: string;
+    }
+    type DataSourceType<T = {}> = T & DataSourceObject;
+    interface AutoCompleteProps extends Omit<InputProps, 'onSelect' | 'onChange'>  {
+      options?: DataSourceType[];
+      onSearch?: (str: string) => void;
+      onSelect?: (item: string) => void;
+      onChange?: (item: string) => void;
+      renderOptions?: (item: DataSourceType) => ReactElement;
+    }
+  ```
+  - Button
+    ```tsx
+      type ButtonSize = 'lg' | 'sm';
+      type ButtonType = 'primary' | 'default' | 'danger' | 'link';
 
-## Available Scripts
+      interface BaseButtonProps {
+        className?: string,
+        /**设置 Button 的禁用 */
+        disabled?: boolean,
+        /**设置 Button 的尺寸 */
+        size?: ButtonSize,
+        /**设置 Button 的类型 */
+        btnType?: ButtonType,
+        children?: React.ReactNode,
+        href?: string
+      }
+    ```
+  - Input
+    ```tsx
+      InputSize = 'lg' | 'sm';
+      interface InputProps extends Omit<InputHTMLAttributes<HTMLElement>, 'size'> {
+        className?: string;
+        disabled?: boolean;
+        size?: InputSize;
+        icon?: any;
+        prepend?: string | React.ReactElement;
+        append?: string | React.ReactElement;
+        onChange?: (e: ChangeEvent<HTMLInputElement>) => void
+      }
+    ```
+  - Loading
+    - 公司Loding组件学习
+    ```tsx
+      type LoadingProps = {
+        className?: string;
+        style?: React.CSSProperties;
+        type?: 'spin';
+      };
+    ```
+  - Menu
+  - Modal
+    - 公司Modal组件学习
+    ```tsx
+      interface ModalProps {
+        visible: boolean;
+        closeModal: () => void;
+        modalHeader?: React.ReactNode;
+        style?: string;
+        className?: React.CSSProperties;
+        title?: string;
+        dialogClassName?: string;
+        rightBtn?: React.ReactNode;
+      }
+    ```
+  - Paginator
+    - 公司Paginator组件学习
+    ```tsx
+      interface paginatorProps {
+        loadNextPage: () => any;
+        element?: React.MutableRefObject<HTMLDivElement | null>;
+        Loading?: React.ComponentType<LoadingProps>;
+        showLoading?: boolean;
+        reverse?: boolean;
+        useCapture?: boolean;
+      };
+    ```
+  - Popover
+    - 公司Popover组件学习
+    ```tsx
+      type PopoverProps = {
+        content: string | React.ReactNode;
+        className?: string;
+        style?: React.CSSProperties;
+        distance?: number
+      }
+    ```
+  - Progress
+    ```tsx
+      type ThemeProps = 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'light' | 'dark'
+      interface ProgressProps {
+        percent: number;
+        strokeHeight?: number;
+        showText?: boolean;
+        style?: React.CSSProperties;
+        theme?: ThemeProps;
+      }
+    ```
+  - Toast
+    - 公司Toast组件学习
+    ```tsx
+      interface ToastProps {
+        message: Message;
+        opt?: ToastOptions
+      }
+    ```
+  - Upload
+    ```tsx
+      type UploadFileStatus = 'ready' | 'uploading' | 'success' | 'error';
+      interface UploadFile {
+        uid: string;
+        size: number;
+        name: string;
+        status?: UploadFileStatus;
+        percent?: number;
+        originFileObj?: File;
+        response?: any;
+        error?: any;
+      }
 
-In the project directory, you can run:
+      interface UploadProps {
+        //  请求url
+        action: string;
+        // header 请求头
+        header?: { [key: string]: any };
+        // 发到后台的文件参数名
+        name?: string;
+        // 上传所需额外参数或返回上传额外参数的方法
+        data?: { [key: string]: any};
+        // 上传请求时是否携带 cookie
+        withCredentials?: boolean; 
+        defaultFileList?: UploadFile[];
+        // 接受上传的文件类型
+        accept?: string;
+        // 是否支持多选文件 
+        multiple?: boolean;
+        // 拖拽
+        drag?: boolean;	
+        // 上传之前
+        beforeUpload?: (file: File) => boolean | Promise<File>;
+        // 上传文件改变时的状态 上传中
+        onProgress?: (percentage: number, file: UploadFile) => void;
+        // 上传文件改变时的状态 成功
+        onSuccess?: (data: any, file: UploadFile) => void;
+        // 上传文件改变时的状态 失败
+        onError?: (err: any, file: UploadFile) => void; 
+        // 上传文件改变时的状态 成功或失败 -> 之后会改为上穿中 成功 失败 三个周期调用
+        onChange?: (file: UploadFile) => void;
+        onRemove?: (file: UploadFile) => void;
+      }
+    ```
+  - VertifyImg
+    - 学习参考 https://juejin.cn/search?query=vertify%E7%BB%84%E4%BB%B6
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Tip
+  - 样式不够规范
+  - 没自定义组件库打包
